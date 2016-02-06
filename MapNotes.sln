@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapNotes.Web", "MapNotes.Web\MapNotes.Web.csproj", "{1E984A57-866E-461B-ABEE-413D1A8E527C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapNotes.DAL", "MapNotes.DAL\MapNotes.DAL.csproj", "{47763917-1AAA-4807-8380-1D797D21A1D7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapNotes.BLL", "MapNotes.BLL\MapNotes.BLL.csproj", "{44BD1014-9668-46A8-9178-4898A2487346}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapNotes.DTO", "MapNotes.DTO\MapNotes.DTO.csproj", "{A962D47A-AB81-44BE-9822-DA03952D30EB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1E984A57-866E-461B-ABEE-413D1A8E527C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1E984A57-866E-461B-ABEE-413D1A8E527C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1E984A57-866E-461B-ABEE-413D1A8E527C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1E984A57-866E-461B-ABEE-413D1A8E527C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{47763917-1AAA-4807-8380-1D797D21A1D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{47763917-1AAA-4807-8380-1D797D21A1D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{47763917-1AAA-4807-8380-1D797D21A1D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{47763917-1AAA-4807-8380-1D797D21A1D7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{44BD1014-9668-46A8-9178-4898A2487346}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{44BD1014-9668-46A8-9178-4898A2487346}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{44BD1014-9668-46A8-9178-4898A2487346}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{44BD1014-9668-46A8-9178-4898A2487346}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A962D47A-AB81-44BE-9822-DA03952D30EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A962D47A-AB81-44BE-9822-DA03952D30EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A962D47A-AB81-44BE-9822-DA03952D30EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A962D47A-AB81-44BE-9822-DA03952D30EB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
