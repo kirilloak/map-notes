@@ -4,13 +4,16 @@
 
     app.service("noteService", function ($q, $http) {
 
-        this.loadNotes = function () {
-            var deferred = $q.defer();
+        var config = { headers: { 'Content-Type': "application/x-www-form-urlencoded" } };
 
-            $http.get("/api/notes").success(function (data) {
+        this.loadNotes = function (latitude, longitude, distance) {
+            var deferred = $q.defer();
+            var data = $.param({ lattitude: latitude, longitude: longitude, distance: distance });
+
+            $http.post("api/notes/getnearest", data, config).success(function (data) {
                 deferred.resolve(data);
             }).error(function (data, status) {
-                deferred.reject("Error: request returned status " + status);
+                deferred.reject("Error: " + status);
             });
             return deferred.promise;
         };
@@ -22,6 +25,10 @@
         $scope.isLoaded = false;
         $scope.map = null;
         $scope.notes = [];
+        $scope.nearestNotes = [];
+
+        $scope.addNoteActive = false;
+        $scope.addNoteTitle = "Новая заметка";
 
         $scope.initialize = function () {
 
@@ -45,19 +52,25 @@
             }
 
             $scope.map.addListener("idle", function () {
-                $scope.updateNotes();
+                $scope.isLoaded = false;
+
+                $scope.refreshMapNotes();
+                $scope.refreshNearestNotes();
+
+                $scope.isLoaded = true;
             });
         }
 
-        $scope.updateNotes = function () {
+        $scope.refreshMapNotes = function () {
             var center = $scope.map.getCenter();
+            var radius = $scope.map.zoom * $scope.map.zoom;
 
-            noteService.loadNotes().then(function (data) {
+            noteService.loadNotes(center.lat(), center.lng(), radius).then(function (data) {
                 $scope.deleteNotes();
 
-                angular.forEach(data, function (item) {
-
+                angular.forEach(data.notes, function (item) {
                     var note = new MarkerWithLabel({
+                        noteId: item.Id,
                         map: $scope.map,
                         position: new google.maps.LatLng(item.latitude, item.longitude),
                         draggable: false,
@@ -71,6 +84,36 @@
                     $scope.notes.push(note);
                 });
             });
+        }
+
+        $scope.refreshNearestNotes = function () {
+            var center = $scope.map.getCenter();
+            var radius = 2;
+
+            noteService.loadNotes(center.lat(), center.lng(), radius).then(function (data) {
+                $scope.nearestNotes = [];
+                angular.forEach(data.notes, function (item) {
+                    $scope.nearestNotes.push(item.title);
+                });
+            });
+        }
+
+        $scope.addNote = function () {
+            var center = $scope.map.getCenter();
+
+            var note = new MarkerWithLabel({
+                noteId: -1,
+                map: $scope.map,
+                position: new google.maps.LatLng(center.lat(), center.lng()),
+                draggable: true,
+                raiseOnDrag: true,
+                labelContent: $scope.addNoteTitle,
+                labelAnchor: new google.maps.Point(90, 0),
+                labelClass: "infobox infobox-new",
+                labelStyle: { opacity: 0.9 },
+                labelInBackground: true
+            });
+            $scope.addNoteActive = true;
         }
 
         $scope.deleteNotes = function () {

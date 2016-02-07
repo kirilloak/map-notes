@@ -14,8 +14,8 @@ namespace MapNotes.DAL.Migrations
                         Id = c.Int(nullable: false, identity: true),
                         UserId = c.String(maxLength: 128),
                         Title = c.String(),
-                        Latitude = c.String(),
-                        Longitude = c.String(),
+                        Latitude = c.Double(nullable: false),
+                        Longitude = c.Double(nullable: false),
                         DateCreated = c.String(),
                         IsActive = c.Boolean(nullable: false),
                     })

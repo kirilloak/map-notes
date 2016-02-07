@@ -1,32 +1,17 @@
 ﻿using System.Linq;
 using MapNotes.DAL.Abstract;
-using MapNotes.DAL.Entities;
-using MapNotes.DTO.Models;
+using MapNotes.DTO.Models.Note;
 
 namespace MapNotes.DAL.Concrete
 {
     public class NoteRepository : BaseRepository, INoteRepository
     {
-        public static NoteModel MapToModel(NoteEntity x)
-        {
-            var model = new NoteModel
-            {
-                Id = x.Id,
-                IsActive = x.IsActive,
-                Title = x.Title,
-                Latitude = x.Latitude,
-                Longitude = x.Longitude,
-                DateCreated = x.DateCreated
-            };
-
-            return model;
-        }
-
         public IQueryable<NoteModel> GetBy()
         {
             return Context.Note.Select(x => new NoteModel
             {
                 Id = x.Id,
+                UserId = x.UserId,
                 IsActive = x.IsActive,
                 Title = x.Title,
                 Latitude = x.Latitude,
@@ -38,6 +23,11 @@ namespace MapNotes.DAL.Concrete
         public NoteModel GetById(int id)
         {
             return GetBy().FirstOrDefault(x => x.Id == id);
+        }
+
+        public IQueryable<NoteModel> GetByUserId(string userId)
+        {
+            return GetBy().Where(x => x.IsActive && x.UserId == userId);
         }
 
         public IQueryable<NoteModel> GetAll()

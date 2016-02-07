@@ -1,5 +1,5 @@
 ﻿using System.Linq;
-using MapNotes.DTO.Models;
+using MapNotes.DTO.Models.Note;
 
 namespace MapNotes.DAL.Abstract
 {
@@ -7,7 +7,8 @@ namespace MapNotes.DAL.Abstract
     {
         IQueryable<NoteModel> GetBy();
 
-        NoteModel GetById(int id);
         IQueryable<NoteModel> GetAll();
+        NoteModel GetById(int id);
+        IQueryable<NoteModel> GetByUserId(string userId);
     }
 }

@@ -2,21 +2,40 @@
     ViewBag.Title = "MapNotes";
 }
 
-<div class="row">
-    <div class="col-md-12">
-
-        <div ng-controller="mapController">
+<div ng-controller="mapController">
+    
+    <div class="row">
+        <div class="col-md-12">
             <div id="map"></div>
+        </div>
+    </div>
 
-            <h3>Заметки в радиусе 2км от центра карты:</h3>
-
+    <div class="row" ng-show="isLoaded">
+        <div class="col-md-6">
+            <br/>
+            <b>Заметки в радиусе 2км от центра карты:</b>
             <ul>
-                <li ng-repeat="x in notes">
-                    {{ x.labelContent }}
+                <li ng-repeat="x in nearestNotes">
+                    {{ x }}
                 </li>
             </ul>
-
         </div>
+        <div class="col-md-6">
+            <br/>
 
+            <div ng-show="!addNoteActive">
+                <button ng-click="addNote()" class="btn btn-success"><span class="glyphicon glyphicon-plus"></span> Добавить заметку</button>
+            </div>
+            
+            <div ng-show="addNoteActive">
+                <b>Добавить заметку</b>
+                <br/>
+                <input type="text" class="form-control" ng-model="addNoteTitle">
+                <br/>
+                <button class="btn btn-success">Добавить</button>
+            </div>
+        </div>
     </div>
+
 </div>
+
