@@ -46,6 +46,18 @@
       <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="StackExchange.Redis, Version=1.0.316.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\StackExchange.Redis.1.0.488\lib\net45\StackExchange.Redis.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="StackExchange.Redis.Extensions.Core, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\StackExchange.Redis.Extensions.Core.1.2.0.0\lib\net45\StackExchange.Redis.Extensions.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="StackExchange.Redis.Extensions.Newtonsoft, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\StackExchange.Redis.Extensions.Newtonsoft.1.2.0.0\lib\net45\StackExchange.Redis.Extensions.Newtonsoft.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -56,11 +68,29 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Abstract\Helpers\IRedisCacheHelper.cs" />
+    <Compile Include="Abstract\Managers\INoteManager.cs" />
+    <Compile Include="BLL_IoCModule.cs" />
+    <Compile Include="Concrete\Helpers\RedisCacheHelper.cs" />
+    <Compile Include="Concrete\Managers\NoteManager.cs" />
+    <Compile Include="IoC.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MapNotes.DAL\MapNotes.DAL.csproj">
+      <Project>{47763917-1aaa-4807-8380-1d797d21a1d7}</Project>
+      <Name>MapNotes.DAL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MapNotes.DTO\MapNotes.DTO.csproj">
+      <Project>{a962d47a-ab81-44be-9822-da03952d30eb}</Project>
+      <Name>MapNotes.DTO</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
