@@ -12,15 +12,15 @@ namespace MapNotes.DAL.Migrations
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
-                        UserId = c.String(maxLength: 128),
-                        Title = c.String(),
+                        UserId = c.String(nullable: false, maxLength: 128),
+                        Title = c.String(nullable: false, maxLength: 200),
                         Latitude = c.Double(nullable: false),
                         Longitude = c.Double(nullable: false),
-                        DateCreated = c.String(),
+                        DateCreated = c.DateTime(nullable: false),
                         IsActive = c.Boolean(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.AspNetUsers", t => t.UserId)
+                .ForeignKey("dbo.AspNetUsers", t => t.UserId, cascadeDelete: true)
                 .Index(t => t.UserId);
             
             CreateTable(

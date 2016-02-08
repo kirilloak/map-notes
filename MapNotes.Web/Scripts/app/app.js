@@ -18,6 +18,17 @@
             return deferred.promise;
         };
         
+        this.saveNote = function (latitude, longitude, title) {
+            var deferred = $q.defer();
+            var data = $.param({ lattitude: latitude, longitude: longitude, title: title });
+
+            $http.post("api/notes", data, config).success(function (data) {
+                deferred.resolve(data);
+            }).error(function (data, status) {
+                deferred.reject("Error: " + status);
+            });
+            return deferred.promise;
+        };
     });
 
     app.controller("mapController", function ($scope, $timeout, noteService) {
@@ -27,8 +38,10 @@
         $scope.notes = [];
         $scope.nearestNotes = [];
 
+        $scope.addNoteMarker = null;
+        $scope.addNoteTitle = "";
         $scope.addNoteActive = false;
-        $scope.addNoteTitle = "Новая заметка";
+
 
         $scope.initialize = function () {
 
@@ -88,7 +101,7 @@
 
         $scope.refreshNearestNotes = function () {
             var center = $scope.map.getCenter();
-            var radius = 2;
+            var radius = 2; //km
 
             noteService.loadNotes(center.lat(), center.lng(), radius).then(function (data) {
                 $scope.nearestNotes = [];
@@ -96,6 +109,16 @@
                     $scope.nearestNotes.push(item.title);
                 });
             });
+        }
+
+        $scope.deleteNotes = function () {
+            if ($scope.notes.length === 0) {
+                return;
+            }
+
+            for (var i = 0; i < $scope.notes.length; i++) {
+                    $scope.notes[i].setMap(null);
+            }
         }
 
         $scope.addNote = function () {
@@ -107,29 +130,25 @@
                 position: new google.maps.LatLng(center.lat(), center.lng()),
                 draggable: true,
                 raiseOnDrag: true,
-                labelContent: $scope.addNoteTitle,
+                labelContent: "Новая заметка",
                 labelAnchor: new google.maps.Point(90, 0),
                 labelClass: "infobox infobox-new",
                 labelStyle: { opacity: 0.9 },
                 labelInBackground: true
             });
+            $scope.addNoteMarker = note;
             $scope.addNoteActive = true;
         }
 
-        $scope.deleteNotes = function () {
-            if ($scope.notes.length === 0) {
-                return;
-            }
+        $scope.saveNote = function () {
+            noteService.saveNote($scope.addNoteMarker.position.lat(), $scope.addNoteMarker.position.lng(), $scope.addNoteTitle).then(function (data) {
+                $scope.addNoteActive = false;
+                $scope.addNoteMarker.setMap(null);
+                $scope.addNoteTitle = "";
 
-            for (var i = 0; i < $scope.notes.length; i++) {
-                $scope.notes[i].setMap(null);
-            }
-
-            $scope.notes.length = 0;
-        }
-
-        $scope.addOnClick = function(event) {
-            
+                $scope.refreshMapNotes();
+                $scope.refreshNearestNotes();
+            });
         }
 
         $timeout(function () {

@@ -10,5 +10,6 @@ namespace MapNotes.DAL.Abstract
         IQueryable<NoteModel> GetAll();
         NoteModel GetById(int id);
         IQueryable<NoteModel> GetByUserId(string userId);
+        int Create(NoteModel model);
     }
 }

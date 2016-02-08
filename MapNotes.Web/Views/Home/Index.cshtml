@@ -15,7 +15,7 @@
             <br/>
             <b>Заметки в радиусе 2км от центра карты:</b>
             <ul>
-                <li ng-repeat="x in nearestNotes">
+                <li ng-repeat="x in nearestNotes track by $index">
                     {{ x }}
                 </li>
             </ul>
@@ -23,16 +23,16 @@
         <div class="col-md-6">
             <br/>
 
-            <div ng-show="!addNoteActive">
+            <div ng-hide="addNoteActive">
                 <button ng-click="addNote()" class="btn btn-success"><span class="glyphicon glyphicon-plus"></span> Добавить заметку</button>
             </div>
             
             <div ng-show="addNoteActive">
                 <b>Добавить заметку</b>
+                <br/><br />
+                <input type="text" class="form-control" ng-model="addNoteTitle" maxlength="200">
                 <br/>
-                <input type="text" class="form-control" ng-model="addNoteTitle">
-                <br/>
-                <button class="btn btn-success">Добавить</button>
+                <button class="btn btn-success" ng-click="saveNote()">Добавить</button>
             </div>
         </div>
     </div>

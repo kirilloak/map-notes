@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Autofac;
@@ -25,6 +26,7 @@ namespace MapNotes.BLL.Concrete.Managers
             var client = new ElasticClient(settings);
 
             var result = client.Search<NoteIndex>(s => s
+                .Take(9999)
                 .Index("mapnotes")
                 .Query(q => q.Match(m => m.OnField(f => f.UserId).Query(userId)))
                 .Filter(f => f.GeoDistance(l => l.Location, d => d.Distance(distance, GeoUnit.Kilometers)
@@ -41,30 +43,39 @@ namespace MapNotes.BLL.Concrete.Managers
             return notes;
         }
 
-        public void RebuildIndex(string userId)
+        public void RebuildIndex(string userId, int? noteId)
         {
-            var noteManager = IoC.Instance.Resolve<INoteManager>();
-            var notes = noteManager.Repository.GetByUserId(userId);
-
-            var settings = new ConnectionSettings(new Uri("http://localhost:9200"), "mapnotes");
-            var client = new ElasticClient(settings);
-
-            var indexExists = client.IndexExists("mapnotes");
-            if (!indexExists.Exists)
+            if (!string.IsNullOrWhiteSpace(userId))
             {
-                client.CreateIndex(descriptor => descriptor.Index("mapnotes")
-                        .AddMapping<NoteIndex>(m => m.Properties(p => p.GeoPoint(d => d.Name(f => f.Location).IndexLatLon()))));
-            }
+                var notes = new List<NoteModel>();
 
-            foreach (var note in notes)
-            {
-                client.Index(new NoteIndex
+                if (noteId.HasValue)
+                    notes.Add(Repository.GetById(noteId.Value));
+                else
+                    notes = Repository.GetByUserId(userId).ToList();
+                
+
+                var settings = new ConnectionSettings(new Uri("http://localhost:9200"), "mapnotes");
+                var client = new ElasticClient(settings);
+
+
+                var indexExists = client.IndexExists("mapnotes");
+                if (!indexExists.Exists)
                 {
-                    Id = note.Id,
-                    UserId = note.UserId,
-                    Title = note.Title,
-                    Location = new Location(note.Latitude, note.Longitude)
-                });
+                    client.CreateIndex(descriptor => descriptor.Index("mapnotes")
+                            .AddMapping<NoteIndex>(m => m.Properties(p => p.GeoPoint(d => d.Name(f => f.Location).IndexLatLon()))));
+                }
+
+                foreach (var note in notes)
+                {
+                    client.Index(new NoteIndex
+                    {
+                        Id = note.Id,
+                        UserId = note.UserId,
+                        Title = note.Title,
+                        Location = new Location(note.Latitude, note.Longitude)
+                    });
+                }
             }
         }
     }

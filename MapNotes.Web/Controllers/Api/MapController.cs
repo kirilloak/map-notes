@@ -1,11 +1,13 @@
-﻿using System;
-using System.Linq;
+﻿using System.Net;
+using System.Net.Http;
+using System.Threading;
 using System.Web.Http;
 using Autofac;
 using MapNotes.BLL;
 using MapNotes.BLL.Abstract.Managers;
 using MapNotes.DTO.ApiModels.Request.Note;
 using MapNotes.DTO.ApiModels.Response.Note;
+using MapNotes.DTO.Models.Note;
 using Microsoft.AspNet.Identity;
 
 namespace MapNotes.Web.Controllers.Api
@@ -13,6 +15,29 @@ namespace MapNotes.Web.Controllers.Api
     [Authorize]
     public class MapController : ApiController
     {
+        [HttpPost]
+        [Route("api/notes")]
+        public HttpResponseMessage CreateNote([FromBody]CreateNoteRequest request)
+        {
+            var noteManager = IoC.Instance.Resolve<INoteManager>();
+            var userId = User.Identity.GetUserId();
+
+            var model = new NoteModel
+            {
+                Title = request.Title,
+                Latitude = request.Lattitude,
+                Longitude = request.Longitude,
+                UserId = userId
+            };
+
+            var noteId = noteManager.Repository.Create(model);
+            noteManager.RebuildIndex(userId, noteId);
+
+            Thread.Sleep(1000);
+
+            return new HttpResponseMessage(HttpStatusCode.OK);
+        }
+
         [HttpPost]
         [Route("api/notes/getnearest")]
         public NearestNoteResponse GetNearestNotes([FromBody]GetNearestNoteRequest request)
@@ -26,30 +51,6 @@ namespace MapNotes.Web.Controllers.Api
             };
 
             return response;
-        }
-
-        [Route("api/test")]
-        public string Test()
-        {
-            var noteManager = IoC.Instance.Resolve<INoteManager>();
-
-            noteManager.RebuildIndex("082f486d-8e89-4f70-a6b6-b2738cbd9bda");
-
-            return DateTime.Now.ToLongTimeString();
-        }
-
-        [Route("api/test2")]
-        public string Test2()
-        {
-            var noteManager = IoC.Instance.Resolve<INoteManager>();
-
-            var lat = 55.01483239352023;
-            var lng = 82.95087408212277;
-            var userId = "082f486d-8e89-4f70-a6b6-b2738cbd9bda";
-
-            var notes = noteManager.GetNearest(userId, lat, lng, 100);
-
-            return notes.Count().ToString();
         }
     }
 }

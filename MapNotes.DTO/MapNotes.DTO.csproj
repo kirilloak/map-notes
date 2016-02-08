@@ -52,6 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApiModels\Request\Note\CreateNoteRequest.cs" />
     <Compile Include="ApiModels\Request\Note\GetNearestNoteRequest.cs" />
     <Compile Include="ApiModels\Response\Note\NearestNoteResponse.cs" />
     <Compile Include="ElasticModels\Location.cs" />

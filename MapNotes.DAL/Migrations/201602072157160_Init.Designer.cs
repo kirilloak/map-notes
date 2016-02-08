@@ -13,7 +13,7 @@ namespace MapNotes.DAL.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "201602071842046_Init"; }
+            get { return "201602072157160_Init"; }
         }
         
         string IMigrationMetadata.Source

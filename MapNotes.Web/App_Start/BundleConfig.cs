@@ -24,6 +24,13 @@ namespace MapNotes.Web
                 "~/Scripts/angular.js",
                 "~/Scripts/app/app.js"
             ));
+
+
+            BundleTable.EnableOptimizations = true;
+
+            #if DEBUG
+            BundleTable.EnableOptimizations = false;
+            #endif
         }
     }
 }

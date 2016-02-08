@@ -2,6 +2,9 @@
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using Autofac;
+using MapNotes.BLL;
+using MapNotes.BLL.Abstract.Managers;
 using MapNotes.DAL.Identity;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
@@ -443,11 +446,12 @@ namespace MapNotes.Web.Controllers
 
         private ActionResult RedirectToLocal(string returnUrl)
         {
-            if (Url.IsLocalUrl(returnUrl))
-            {
-                return Redirect(returnUrl);
-            }
-            return RedirectToAction("Index", "Home");
+            //if (Url.IsLocalUrl(returnUrl))
+            //{
+            //    return Redirect(returnUrl);
+            //}
+
+            return RedirectToAction("Index", "Home", new { updateIndex = true });
         }
 
         internal class ChallengeResult : HttpUnauthorizedResult

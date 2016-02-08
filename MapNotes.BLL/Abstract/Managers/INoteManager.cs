@@ -9,6 +9,6 @@ namespace MapNotes.BLL.Abstract.Managers
         INoteRepository Repository { get; set; }
 
         IEnumerable<NearestNoteModel> GetNearest(string userId, double latitude, double longitude, int distance);
-        void RebuildIndex(string userId);
+        void RebuildIndex(string userId, int? noteId);
     }
 }
